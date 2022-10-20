@@ -94,6 +94,15 @@ The `.env` file contains the following information:
 - `DATABASE`: The name of the _MySQL_ database.
 - `SSL_CERT`: This is mainly for _PlanetScale_ database. It defaults to the file at `cacert.pem` located in the root directory of this repository. You can leave it empty if you are not using _PlanetScale_.
 
+If you just want to scrape comic(s) and don't want to save it to MySQL database, you can just leave the `.env` file empty and remove `AddToDatabasePipeline` from the `ITEM_PIPELINES` in `settings.py`.
+
+```diff
+ITEM_PIPELINES = {
+   'ultimatescraper.pipelines.ValidateItemPipeline.ValidateItemPipeline': 100,
+-  'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
+}
+```
+
 ### Running the Scraper
 
 To use the scraper, you need to run `Scrapy CLI` commands. You can learn more about Scrapy CLI in [here](https://docs.scrapy.org/en/latest/topics/commands.html).
@@ -105,3 +114,9 @@ python -m scrapy crawl ViewComics
 ```
 
 This will scrape ViewComics website and save all the processed items in the database.
+
+You can also scrape a single comic by providing the URL of the comic. For example, to scrape _The Walking Dead_ comic, you need to run the following command:
+
+```bash
+python -m scrapy crawl ViewComics -a comic=https://viewcomics.me/comic/the-walking-dead
+```
