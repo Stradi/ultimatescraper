@@ -9,8 +9,6 @@ class ViewcomicsSpider(scrapy.Spider):
   allowed_domains = ['viewcomics.me']
   start_url = ALL_COMICS_URL
 
-  scraped_count = 0
-
   def __init__(self, comic=None, *args, **kwargs):
     if comic == None:
       self.start_url = ALL_COMICS_URL
