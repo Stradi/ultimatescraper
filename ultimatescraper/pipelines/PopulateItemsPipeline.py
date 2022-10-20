@@ -8,7 +8,12 @@ from slugify import slugify
 
 
 class PopulateItemsPipeline:
+  session = None
+
   def process_item(self, item, spider):
+    if self.session == None:
+      self.session = requests.Session()
+
     adapter = ItemAdapter(item)
     
     has_valid_issue = False
@@ -44,5 +49,5 @@ class PopulateItemsPipeline:
     return datetime(int(dateStr), 1, 1)
 
   def is_image_valid(self, image_url):
-    resp = requests.get(image_url)
+    resp = self.session.get(image_url)
     return resp.ok
