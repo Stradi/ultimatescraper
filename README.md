@@ -15,7 +15,7 @@ I am still working on more great features. Here are some of the features that I 
 - [ ] [ReadComicsOnline](https://readcomicsonline.ru) support
 - [ ] [ComicExtra](https://comicextra.com) support
 - [ ] Scrape single comic by providing name
-- [ ] Scrape single comic by providing URL
+- [x] Scrape single comic by providing URL
 - [ ] Scrape all comics from a genre
 - [ ] Scrape all comics from a publisher
 - [ ] Scrape all comics from a author
