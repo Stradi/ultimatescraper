@@ -3,15 +3,29 @@ from asyncio.log import logger
 import scrapy
 from ultimatescraper.items import ComicItem
 
-
+ALL_COMICS_URL = "https://viewcomics.me/comic-list"
 class ViewcomicsSpider(scrapy.Spider):
   name = 'ViewComics'
   allowed_domains = ['viewcomics.me']
-  start_urls = ['https://viewcomics.me/comic-list']
+  start_url = ALL_COMICS_URL
 
   scraped_count = 0
 
-  def parse(self, response):
+  def __init__(self, comic=None, *args, **kwargs):
+    if comic == None:
+      self.start_url = ALL_COMICS_URL
+    else:
+      self.start_url = comic
+
+    super(ViewcomicsSpider, self).__init__(*args, **kwargs)
+
+  def start_requests(self): 
+    if self.start_url == ALL_COMICS_URL:
+      yield scrapy.Request(self.start_url, callback=self.parse_all_comics)
+    else:
+      yield scrapy.Request(self.start_url, callback=self.parse_comic)
+
+  def parse_all_comics(self, response):
     urls_in_page = response.css('.line-list a::attr(href)').getall()
     next_page_url = response.css('a[rel=next]::attr(href)').get()
 
@@ -19,7 +33,7 @@ class ViewcomicsSpider(scrapy.Spider):
       yield scrapy.Request(url, callback=self.parse_comic)
 
     if next_page_url:
-      yield response.follow(next_page_url, callback=self.parse)
+      yield response.follow(next_page_url, callback=self.parse_all_comics)
 
   def parse_comic(self, response):
     def parse_table():
