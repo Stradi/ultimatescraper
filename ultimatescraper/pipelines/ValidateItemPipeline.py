@@ -7,7 +7,7 @@ from scrapy.exceptions import DropItem
 from slugify import slugify
 
 
-class PopulateItemsPipeline:
+class ValidateItemPipeline:
   session = None
 
   def process_item(self, item, spider):
