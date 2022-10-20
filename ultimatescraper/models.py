@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_CONNECTION = peewee.MySQLDatabase(
+connection = peewee.MySQLDatabase(
   os.getenv("DATABASE"),
   host=os.getenv("HOST"),
   user=os.getenv("USER"),
@@ -21,7 +21,7 @@ class MetaModel(peewee.Model):
   updated_at = peewee.DateTimeField(default=datetime.now)
   
   class Meta:
-    database = DATABASE_CONNECTION
+    database = connection
 
 class BaseModel(MetaModel):
   name = peewee.CharField(255)
@@ -66,7 +66,9 @@ class ComicAuthorModel(MetaModel):
   class Meta:
     db_table = "comic_author"
 
-DATABASE_CONNECTION.create_tables([
+connection.connect()
+
+connection.create_tables([
   ComicModel,
   IssueModel,
   PageModel,
@@ -75,3 +77,5 @@ DATABASE_CONNECTION.create_tables([
   ComicTagModel,
   ComicAuthorModel
 ])
+
+connection.close()

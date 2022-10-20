@@ -1,18 +1,29 @@
+import os
+
+import peewee
 import ultimatescraper.models as models
+from dotenv import load_dotenv
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 
+load_dotenv()
 
 class AddToDatabasePipeline:
   def process_item(self, item, spider):
-    adapter = ItemAdapter(item)
-    with models.DATABASE_CONNECTION.transaction() as txn:
+    connection = peewee.MySQLDatabase(
+      os.getenv("DATABASE"),
+      host=os.getenv("HOST"),
+      user=os.getenv("USER"),
+      password=os.getenv("PASSWORD"),
+      ssl_ca="{cwd}/{cert}".format(cwd=os.getcwd(), cert=os.getenv("SSL_CERT"))
+    )
+
+    with connection:
+      adapter = ItemAdapter(item)
       try:
-        models.DATABASE_CONNECTION.connect(True)
         self.create_comic(adapter.asdict())
         return item
       except Exception as e:
-        txn.rollback()
         raise DropItem(str(e))
 
   def create_comic(self, data):
