@@ -49,5 +49,5 @@ class PopulateItemsPipeline:
     return datetime(int(dateStr), 1, 1)
 
   def is_image_valid(self, image_url):
-    resp = self.session.get(image_url)
+    resp = self.session.get(image_url.replace("=s1600", "=s1"))
     return resp.ok
