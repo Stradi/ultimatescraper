@@ -14,6 +14,6 @@ LOG_DATEFORMAT = '%y-%m-%d %H:%M:%S'
 LOG_LEVEL = 'INFO'
 
 ITEM_PIPELINES = {
-   'ultimatescraper.pipelines.ValidateItemPipeline.ValidateItemPipeline': 100,
-   'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
+    'ultimatescraper.pipelines.ValidateItemPipeline.ValidateItemPipeline': 100,
+    'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
 }
