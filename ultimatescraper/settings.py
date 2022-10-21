@@ -1,3 +1,7 @@
+import os
+
+from dotenv import load_dotenv
+
 BOT_NAME = 'ultimatescraper'
 USER_AGENT = 'UltimateComic/0.1.0 (+https://www.ultimatecomic.com)'
 
@@ -17,3 +21,11 @@ ITEM_PIPELINES = {
     'ultimatescraper.pipelines.ValidateItemPipeline.ValidateItemPipeline': 100,
     'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
 }
+
+load_dotenv()
+
+DB_HOST = os.environ.get("DB_HOST")
+DB_USER = os.environ.get("DB_USER")
+DB_PASS = os.environ.get("DB_PASS")
+DB_NAME = os.environ.get("DB_NAME")
+DB_SSL_CERT = os.environ.get("DB_SSL_CERT")

@@ -1,23 +1,16 @@
-import os
-
 import peewee
 import ultimatescraper.models as models
-from dotenv import load_dotenv
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
-
-load_dotenv()
+from ultimatescraper.utils.database import (get_connection_args_for_peewee,
+                                            get_database_name)
 
 
 class AddToDatabasePipeline:
     def process_item(self, item, spider):
         database = peewee.MySQLDatabase(
-            os.getenv("DB_NAME"),
-            host=os.getenv("DB_HOST"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASS"),
-            ssl_ca="{cwd}/{cert}".format(cwd=os.getcwd(),
-                                         cert=os.getenv("DB_SSL_CERT"))
+            get_database_name(),
+            **get_connection_args_for_peewee()
         )
 
         with database:

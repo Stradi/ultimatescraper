@@ -1,19 +1,14 @@
 import datetime
-import os
 from datetime import datetime
 
 import peewee
-from dotenv import load_dotenv
 
-load_dotenv()
+from ultimatescraper.utils.database import (get_connection_args_for_peewee,
+                                            get_database_name)
 
 database = peewee.MySQLDatabase(
-    os.getenv("DB_NAME"),
-    host=os.getenv("DB_HOST"),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASS"),
-    ssl_ca="{cwd}/{cert}".format(cwd=os.getcwd(),
-                                 cert=os.getenv("DB_SSL_CERT"))
+    get_database_name(),
+    **get_connection_args_for_peewee()
 )
 
 
