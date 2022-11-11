@@ -1,7 +1,8 @@
 import peewee
-import ultimatescraper.models as models
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
+
+import ultimatescraper.models as models
 from ultimatescraper.utils.database import (get_connection_args_for_peewee,
                                             get_database_name)
 
@@ -82,3 +83,34 @@ class AddToDatabasePipeline:
         )
 
         return author[0]
+
+class AddToDatabasePipelineLatest:
+    def process_item(self, item, spider):
+        database = peewee.MySQLDatabase(
+            get_database_name(),
+            **get_connection_args_for_peewee()
+        )
+
+        with database:
+            adapter = ItemAdapter(item)
+            try:
+                self.create_comic(adapter.asdict())
+                return item
+            except Exception as e:
+                raise DropItem(str(e))
+
+    def create_comic(self, data):
+        try:
+            comic = models.ComicModel.get(models.ComicModel.slug == data["slug"])
+            for issue in data["issues"]:
+                self.create_issue(issue, comic)
+
+        except models.ComicModel.DoesNotExist:
+            return AddToDatabasePipeline().create_comic(data)
+
+    def create_issue(self, issue, comic):
+        try:
+            issue = models.IssueModel.select().join(models.ComicModel).where(
+                models.IssueModel.slug == issue["slug"], models.ComicModel.slug == comic.slug).get()
+        except models.IssueModel.DoesNotExist:
+            return AddToDatabasePipeline().create_issue(issue, comic)
