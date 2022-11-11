@@ -19,6 +19,12 @@ class ValidateItemPipeline:
         has_valid_issue = False
         for issue in adapter["issues"]:
             issue["name"] = "Issue #{number}".format(number=issue["number"])
+            
+            # Ideally we should do any computation after validating the issue but in here
+            # we assign slug because in some rare cases (I mean really rare) the slug
+            # is not assigned and item still gets passed to the next pipeline. I don't
+            # know why this happens but I'm think it's a bug in Scrapy or I am stupid.
+            issue["slug"] = self.generate_slug(issue["name"])
 
             if not self.is_image_valid(issue["images"][0]):
                 logging.debug("Skipping \"{issue}\" of \"{comicname}\" because images is invalid.".format(
@@ -27,7 +33,6 @@ class ValidateItemPipeline:
 
             has_valid_issue = True
 
-            issue["slug"] = self.generate_slug(issue["name"])
             issue["images"] = [image.replace(
                 "=s1600", "=s0") for image in issue["images"]]
             del issue["number"]
