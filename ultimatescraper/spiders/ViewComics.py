@@ -1,6 +1,7 @@
 import logging
 
 import scrapy
+
 from ultimatescraper.items import ComicItem
 
 ALL_COMICS_URL = "https://viewcomics.me/comic-list"
@@ -10,6 +11,13 @@ class ViewcomicsSpider(scrapy.Spider):
     name = 'ViewComics'
     allowed_domains = ['viewcomics.me']
     start_url = ALL_COMICS_URL
+
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'ultimatescraper.pipelines.PopulateItemsPipeline.ValidateItemPipeline': 100,
+            'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
+        }
+    }
 
     def __init__(self, comic=None, *args, **kwargs):
         if comic == None:

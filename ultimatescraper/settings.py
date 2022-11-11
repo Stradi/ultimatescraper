@@ -17,11 +17,6 @@ LOG_FORMAT = '%(asctime)s [%(levelname)8s]: %(message)s'
 LOG_DATEFORMAT = '%y-%m-%d %H:%M:%S'
 LOG_LEVEL = 'INFO'
 
-ITEM_PIPELINES = {
-    'ultimatescraper.pipelines.ValidateItemPipeline.ValidateItemPipeline': 100,
-    'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
-}
-
 load_dotenv()
 
 DB_HOST = os.environ.get("DB_HOST")
