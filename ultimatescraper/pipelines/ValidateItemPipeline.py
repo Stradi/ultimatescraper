@@ -16,7 +16,7 @@ class ValidateItemPipeline:
 
         adapter = ItemAdapter(item)
 
-        has_valid_issue = False
+        valid_issues = []
         for issue in adapter["issues"]:
             issue["name"] = "Issue #{number}".format(number=issue["number"])
             
@@ -31,13 +31,13 @@ class ValidateItemPipeline:
                     issue=issue["name"], comicname=adapter["name"]))
                 continue
 
-            has_valid_issue = True
 
             issue["images"] = [image.replace(
                 "=s1600", "=s0") for image in issue["images"]]
             del issue["number"]
+            valid_issues.append(issue)
 
-        if not has_valid_issue:
+        if len(valid_issues) <= 0:
             raise DropItem("All issues are invalid.")
 
         adapter["slug"] = self.generate_slug(adapter["name"])
@@ -49,6 +49,9 @@ class ValidateItemPipeline:
         adapter["summary"] = "" if adapter["summary"] == "N/a" else adapter["summary"]
 
         adapter["coverImage"] = adapter["issues"][0]["images"][0]
+
+        del adapter["issues"]
+        adapter["issues"] = valid_issues
         return item
 
     def generate_slug(self, name):
