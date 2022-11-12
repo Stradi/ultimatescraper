@@ -7,6 +7,13 @@ on:
         required: true
         type: string
         default: "https://www.viewcomics.me/comic/COMIC_SLUG"
+      provider:
+        description: "Provider of choice"
+        required: false
+        type: choice
+        default: "ViewComics"
+        options:
+          - ViewComics
 jobs:
   scrape:
     name: Scrapes the comic from ViewComics and adds to the database
@@ -28,4 +35,4 @@ jobs:
       - name: Install dependencies via Pip
         run: pip install -r requirements.txt
       - name: Run scraper
-        run: scrapy crawl ViewComics -a comic=
+        run: scrapy crawl ${{ inputs.provider }} -a comic=${{ inputs.url }}
