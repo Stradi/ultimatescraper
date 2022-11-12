@@ -14,7 +14,7 @@ class ViewcomicsSpider(scrapy.Spider):
 
     custom_settings = {
         'ITEM_PIPELINES': {
-            'ultimatescraper.pipelines.PopulateItemsPipeline.ValidateItemPipeline': 100,
+            'ultimatescraper.pipelines.ValidateItemPipeline.ValidateItemPipeline': 100,
             'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
         }
     }
