@@ -3,7 +3,6 @@ import logging
 import scrapy
 
 from ultimatescraper.items import ComicItem
-from ultimatescraper.spiders.ViewComics import ViewcomicsSpider
 
 
 class ViewComicsLatestSpider(scrapy.Spider):
@@ -14,7 +13,7 @@ class ViewComicsLatestSpider(scrapy.Spider):
     custom_settings = {
         'ITEM_PIPELINES': {
             'ultimatescraper.pipelines.ValidateItemPipeline.ValidateItemPipeline': 100,
-            'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipelineLatest': 200,
+            'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
         }
     }
 
