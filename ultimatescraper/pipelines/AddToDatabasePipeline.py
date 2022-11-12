@@ -87,10 +87,14 @@ class AddToDatabasePipeline:
             slug=tag_data["slug"]
         )
 
-        models.ComicTagModel.create(
-            comic=comic,
-            tag=tag[0]
-        )
+        try:
+            models.ComicTagModel.select().join(models.ComicModel, on=(models.ComicTagModel.comic_id == models.ComicModel.id)).join(models.TagModel, on=(models.ComicTagModel.tag_id == models.TagModel.id)).where(
+                models.ComicTagModel.comic.slug == comic.slug, models.ComicTagModel.tag.slug == tag[0].slug).get()
+        except models.ComicTagModel.DoesNotExist:
+            models.ComicTagModel.create(
+                comic=comic,
+                tag=tag[0]
+            )
 
         return tag[0]
 
@@ -100,9 +104,13 @@ class AddToDatabasePipeline:
             slug=author_data["slug"]
         )
 
-        models.ComicAuthorModel.create(
-            comic=comic,
-            author=author[0]
-        )
+        try: 
+            models.ComicAuthorModel.select().join(models.ComicModel, on=(models.ComicAuthorModel.comic_id == models.ComicModel.id)).join(models.AuthorModel, on=(models.ComicAuthorModel.author_id == models.AuthorModel.id)).where(
+                models.ComicAuthorModel.comic.slug == comic.slug, models.ComicAuthorModel.author.slug == author[0].slug).get()
+        except models.ComicAuthorModel.DoesNotExist:
+            models.ComicAuthorModel.create(
+                comic=comic,
+                author=author[0]
+            )
 
         return author[0]
