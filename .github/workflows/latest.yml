@@ -1,6 +1,6 @@
 name: Scrape Latest
 on:
-  workflow-dispatch:
+  workflow_dispatch:
   schedule:
     - cron: "0 0,12 * * *"
 jobs:
