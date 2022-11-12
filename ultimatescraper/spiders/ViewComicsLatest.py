@@ -14,6 +14,7 @@ class ViewComicsLatestSpider(scrapy.Spider):
         'ITEM_PIPELINES': {
             'ultimatescraper.pipelines.ValidateItemPipeline.ValidateItemPipeline': 100,
             'ultimatescraper.pipelines.AddToDatabasePipeline.AddToDatabasePipeline': 200,
+            'ultimatescraper.pipelines.RevalidateWebsitePipeline.RevalidateWebsitePipeline': 300
         }
     }
 
