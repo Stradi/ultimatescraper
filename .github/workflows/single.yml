@@ -1,4 +1,5 @@
 name: Scrape Single Comic
+run-name: Scrape ${{ inputs.url }} from ${{ inputs.provider }}
 on:
   workflow_dispatch:
     inputs:
