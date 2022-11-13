@@ -14,7 +14,7 @@ class RevalidateWebsitePipeline:
 
         adapter = ItemAdapter(item)
 
-        urls_to_revalidate = []
+        urls_to_revalidate = [] + _PROJECT_SETTINGS.get("REVALIDATION_PATHS")
         
         urls_to_revalidate.append("/comic/{}".format(adapter["slug"]))
         for issue in adapter["issues"]:
@@ -27,6 +27,7 @@ class RevalidateWebsitePipeline:
             urls_to_revalidate.append("/author/{}".format(author["slug"]))
 
         logging.info("Revalidating {} paths for {}".format(len(urls_to_revalidate), adapter["name"]))
+        logging.info("Paths are: {}".format(urls_to_revalidate))
         validated_paths, unvalidated_paths = self.revalidate_multiple(urls_to_revalidate)
         logging.info("Revalidated {}/{} paths for {}".format(len(validated_paths), len(unvalidated_paths), adapter["name"]))
         

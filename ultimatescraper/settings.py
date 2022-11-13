@@ -26,3 +26,7 @@ DB_NAME = os.environ.get("DB_NAME")
 DB_SSL_CERT = os.environ.get("DB_SSL_CERT")
 REVALIDATION_SECRET = os.environ.get("REVALIDATION_SECRET")
 REVALIDATION_URL = os.environ.get("REVALIDATION_URL")
+REVALIDATION_PATHS = [
+  "/",
+  "/search",
+]
