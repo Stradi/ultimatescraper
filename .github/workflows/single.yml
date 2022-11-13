@@ -15,6 +15,15 @@ on:
         default: "ViewComics"
         options:
           - ViewComics
+      log_level:
+        description: "Log level of Scrapy"
+        required: false
+        type: choice
+        default: "INFO"
+        options:
+          - "DEBUG"
+          - "INFO"
+          - "WARNING"
 jobs:
   scrape:
     name: Scrapes the comic from ViewComics and adds to the database
@@ -36,4 +45,4 @@ jobs:
       - name: Install dependencies via Pip
         run: pip install -r requirements.txt
       - name: Run scraper
-        run: scrapy crawl ${{ inputs.provider }} -a comic=${{ inputs.url }}
+        run: scrapy crawl ${{ inputs.provider }} -a comic=${{ inputs.url }} -s LOG_LEVEL=${{ inputs.log_level }}
