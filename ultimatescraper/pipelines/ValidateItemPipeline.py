@@ -48,8 +48,8 @@ class ValidateItemPipeline:
             author)} for author in adapter["authors"]]
         adapter["summary"] = "" if adapter["summary"] == "N/a" else adapter["summary"]
 
-        adapter["coverImage"] = adapter["issues"][0]["images"][0]
-
+        adapter["coverImage"] = valid_issues[0]["images"][0]
+        
         del adapter["issues"]
         adapter["issues"] = valid_issues
         return item
