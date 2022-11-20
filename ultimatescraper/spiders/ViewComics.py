@@ -5,9 +5,10 @@ import scrapy
 from ultimatescraper.items import ComicItem
 
 ALL_COMICS_URL = "https://viewcomics.me/comic-list"
+LATEST_COMICS_URL = "https://viewcomics.me/comic-updates"
 
 
-class ViewcomicsSpider(scrapy.Spider):
+class ViewComicsSpider(scrapy.Spider):
     name = 'ViewComics'
     allowed_domains = ['viewcomics.me']
     start_url = ALL_COMICS_URL
@@ -20,19 +21,48 @@ class ViewcomicsSpider(scrapy.Spider):
         }
     }
 
-    def __init__(self, comic=None, *args, **kwargs):
-        if comic == None:
-            self.start_url = ALL_COMICS_URL
-        else:
-            self.start_url = comic
+    def __init__(self, latest=None, comic=None, *args, **kwargs):
+        super(ViewComicsSpider, self).__init__(*args, **kwargs)
 
-        super(ViewcomicsSpider, self).__init__(*args, **kwargs)
+        if latest == None and comic == None:
+            logging.info("No arguments passed, scraping all comics.")
+            self.start_url = ALL_COMICS_URL
+        elif latest == None and not comic == None:
+            logging.info("Scraping comic '{comic_url}'".format(comic_url=comic))
+            self.start_url = comic
+        elif not latest == None and comic == None:
+            logging.info("Scraping latest comics.")
+            self.start_url = LATEST_COMICS_URL
+        else:
+            raise Exception(
+                "You can't use both 'latest' and 'comic' arguments at the same time.")
 
     def start_requests(self):
-        if self.start_url == ALL_COMICS_URL:
+        if self.start_url == LATEST_COMICS_URL:
+            yield scrapy.Request(self.start_url, callback=self.parse_latest_comics)
+        elif self.start_url == ALL_COMICS_URL:
             yield scrapy.Request(self.start_url, callback=self.parse_all_comics)
         else:
             yield scrapy.Request(self.start_url, callback=self.parse_comic)
+
+    def parse_latest_comics(self, response):
+        found_any_comics = False
+
+        all_items = response.css('.line-list')
+        for item in all_items:
+            date = item.css('.date::text').get()
+            if not (date == 'Today' or date == 'Yesterday'):
+                continue
+
+            found_any_comics = True
+
+            url = item.css(':scope > li > a::attr(href)').get()
+            yield response.follow(url, callback=self.parse_comic)
+            # TODO: Check for '.icon-new'.
+
+        if found_any_comics:
+            next_page_url = response.css('a[rel=next]::attr(href)').get()
+            yield response.follow(next_page_url, callback=self.parse_latest_comics)
 
     def parse_all_comics(self, response):
         urls_in_page = response.css('.line-list a::attr(href)').getall()
