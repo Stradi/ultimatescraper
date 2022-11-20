@@ -1,6 +1,10 @@
+import logging
 import os
 
 from dotenv import load_dotenv
+
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("requests").setLevel(logging.WARNING)
 
 BOT_NAME = 'ultimatescraper'
 USER_AGENT = 'UltimateComic/0.1.0 (+https://www.ultimatecomic.com)'
