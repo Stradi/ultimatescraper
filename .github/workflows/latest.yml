@@ -26,4 +26,4 @@ jobs:
       - name: Install dependencies via Pip
         run: pip install -r requirements.txt
       - name: Run scraper
-        run: scrapy crawl ViewComicsLatest
+        run: scrapy crawl ViewComics -a latest=1
