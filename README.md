@@ -2,7 +2,7 @@
 
 This is the second version of the comic scraper. It is a complete rewrite of the original scraper writter in TypeScript, which can be found [here](https://www.github.com/Stradi/comic-scraper).
 
-This project is mainly used in [UltimateComics](https://www.ultimatecomics.com).
+This project is mainly used in [UltimateComic](https://www.ultimatecomic.com).
 
 ## Features
 
