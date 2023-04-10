@@ -10,7 +10,7 @@ The scraper scrapes websites, extracts comics and stores them in a database.
 
 I am still working on more great features. Here are some of the features that I want to implement:
 
-- [x] [ViewComics](https://viewcomics.me) support
+- [x] [ViewComics](https://viewcomics.co) support
 - [ ] [ReadComicOnline](https://readcomiconline.li) support
 - [ ] [ReadComicsOnline](https://readcomicsonline.ru) support
 - [ ] [ComicExtra](https://comicextra.com) support

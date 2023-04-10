@@ -4,13 +4,13 @@ import scrapy
 
 from ultimatescraper.items import ComicItem
 
-ALL_COMICS_URL = "https://viewcomics.me/comic-list"
-LATEST_COMICS_URL = "https://viewcomics.me/comic-updates"
+ALL_COMICS_URL = "https://viewcomics.co/comic-list"
+LATEST_COMICS_URL = "https://viewcomics.co/comic-updates"
 
 
 class ViewComicsSpider(scrapy.Spider):
     name = 'ViewComics'
-    allowed_domains = ['viewcomics.me']
+    allowed_domains = ['viewcomics.co']
     start_url = ALL_COMICS_URL
 
     custom_settings = {
